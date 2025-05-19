@@ -245,7 +245,7 @@
         <div class="mini-nav">
             <a href="admin_listlocations.php"><span>List</span></a>
             <a href="admin_addparkingadmin.php"><span>Add Admin</span></a>
-            <a href="admin_addlocation.php"><span class="active">Add Location</span></a>
+            <a href="admin_addlocation.php"><span>Add Location</span></a>
             <a href="admin_maplocation.php"><span class="active">Map</span></a>
         </div>
     </div>
