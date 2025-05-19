@@ -239,8 +239,8 @@
     </div>
     <div class="main">
         <div class="mini-nav">
-            <a href="#"><span class="active">Booked Slots</span></a>
-            <!-- <a href="admin_editparkingslots.php"><span>Update Slots</span></a> -->
+            <a href="admin_listbooking.php"><span class="active">Booked Slots</span></a>
+            <a href="admin_editparkingslots.php"><span>Update Slots</span></a>
         </div>
         <div class="slot-list">
             <?php if(isset($_GET['msg']) && $_GET['msg']==3) {?>
@@ -260,7 +260,6 @@
                         <th rowspan="2">Booked Slot</th>
                         <th rowspan="2">Booked By</th>
                         <th rowspan="2">Approval Status</th>
-                        <th rowspan="2">Action</th>
                     </tr>
                     <tr>
                         <th>From</th>
@@ -278,15 +277,15 @@
                                 <td><?php echo $record['BookStatus'] ?></td>
                                 <td><?php echo $record['SlotID'] ?></td>
                                 <td><?php echo $record['UserID'] ?></td>
-                                <?php if($record['BookStatus']=='upcoming'){ ?>
+                                <!-- <?php //if($record['BookStatus']=='upcoming'){ ?>
                                     <td class="action">
-                                        <a href="admin_changeslottype.php?id=<?php echo $record['SlotID'] ?>?locid=<?php echo $record['LocationID'] ?>" class="edit">Change Slot Type</a>
+                                        <a href="admin_changeslottype.php?id=<?php //echo $record['SlotID'] ?>?locid=<?php //echo $record['LocationID'] ?>" class="edit">Change Slot Type</a>
                                         |
-                                        <a href="admin_deleteslot.php?id=<?php echo $record['SlotID'] ?>?locid=<?php echo $record['LocationID'] ?>" class="delete" onclick="return confirm('Are you sure to delete the slot?')">Delete</a>
+                                        <a href="admin_deleteslot.php?id=<?php// echo $record['SlotID'] ?>?locid=<?php //echo $record['LocationID'] ?>" class="delete" onclick="return confirm('Are you sure to delete the slot?')">Delete</a>
                                     </td>
-                                <?php }else{?>
+                                <?php //}else{?>
                                     <td>No action while slot is booked</td>
-                                <?php }?>
+                                <?php //}?> -->
                             </tr>
                         <?php } ?>
                     <?php } else {?>
