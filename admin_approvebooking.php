@@ -240,7 +240,7 @@
     <div class="main">
         <div class="mini-nav">
             <a href="admin_listbooking.php"><span class="active">Booked Slots</span></a>
-            <a href="admin_approvebooking.php"><span>Update Slots</span></a>
+            <a href="admin_approvebooking.php"><span>Approve Booking</span></a>
         </div>
         <div class="slot-list">
             <?php if(isset($_GET['msg']) && $_GET['msg']==3) {?>
@@ -268,25 +268,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if(count($data)>0){ ?>
-                        <?php foreach($data as $key=>$record){ ?>    
+                    <?php if($data['ApprovalStatus']=='pending'){?>
+                        <?php if(count($data)>0){ ?>
+                            <?php foreach($data as $key=>$record){ ?>    
+                                <tr>
+                                    <td><?php echo $key+1 ?></td>
+                                    <td><?php echo $record['BookID'] ?></td>
+                                    <td><?php echo $record['BookStart'] ?></td>
+                                    <td><?php echo $record['BookEnd'] ?></td>
+                                    <td><?php echo $record['BookStatus'] ?></td>
+                                    <td><?php echo $record['SlotID'] ?></td>
+                                    <td><?php echo $record['UserID'] ?></td>
+                                    <td class="action">
+                                        <a href="admin_changeapprovalstatus.php?id=<?php echo $record['BookID'] ?>" class="edit">Approve</a>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        <?php } else {?>
                             <tr>
-                                <td><?php echo $key+1 ?></td>
-                                <td><?php echo $record['BookID'] ?></td>
-                                <td><?php echo $record['BookStart'] ?></td>
-                                <td><?php echo $record['BookEnd'] ?></td>
-                                <td><?php echo $record['BookStatus'] ?></td>
-                                <td><?php echo $record['SlotID'] ?></td>
-                                <td><?php echo $record['UserID'] ?></td>
-                                <td class="action">
-                                    <a href="admin_changeapprovalstatus.php?id=<?php echo $record['BookID'] ?>" class="edit">Approve</a>
-                                </td>
+                                <td colspan="9">No slots booked</td>
                             </tr>
-                        <?php } ?>
-                    <?php } else {?>
-                        <tr>
-                            <td colspan="9">No slots booked</td>
-                        </tr>
+                        <?php }?>
                     <?php }?>
                 </tbody>
             </table>
