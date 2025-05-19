@@ -14,7 +14,11 @@
     $dataadmin=[];
     $dataadmin=$adminrole->fetch_assoc();
     $roleadmin=$dataadmin['AdminRole'];
-    $sql_parkadminid=" SELECT AdminID,Username from admin where AdminRole='parkingadmin' ";
+    $sql_parkadminid="SELECT admin.AdminID, admin.Username FROM admin
+                        WHERE admin.AdminRole = 'parkingadmin'
+                        AND admin.AdminID NOT IN (
+                            SELECT DISTINCT parklocation.AdminID FROM parklocation
+                        );";
     $parkadmin_id=$connection->query($sql_parkadminid);
     $data1=[];
     if($parkadmin_id-> num_rows>0){
