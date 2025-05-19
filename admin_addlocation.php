@@ -159,7 +159,7 @@
         .main form{
             position: relative;
             padding: 20px;
-            width: 750px;
+            width: auto;
             margin: auto;
             height:auto;
         }
@@ -201,10 +201,10 @@
             background-color: #d4e9ff;
             box-shadow: 1px 1px 1px 1px #8a98b3 inset;
         }
-        .label-input iframe{
+        .label-input .gmapAPI{
             padding: 5px;
             border-radius: 5px;
-            width: 300px;
+            width: 450px;
             height:300px;
             background-color: #d4e9ff;
             box-shadow: 1px 1px 1px 1px #8a98b3 inset;
@@ -304,7 +304,7 @@
         </div>
         <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
             <fieldset>
-                <legend>Add New Election</legend>
+                <legend>Add New Location</legend>
                 <?php if(isset($error)) {?>
                     <p class="err_msg"><?php echo $error ?></p>
                 <?php }?>
@@ -337,8 +337,7 @@
                 </div>
                 <div class="label-input label-map">
                     <label for="location_name">Location in Map</label>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d53719.93686121613!2d85.28493302080203!3d27.708954252207754!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb198a307baabf%3A0xb5137c1bf18db1ea!2sKathmandu%2044600!5e1!3m2!1sen!2snp!4v1747483222076!5m2!1sen!2snp" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    <span id="check_location"></span>
+                    <div class="gmapAPI" id="gmapAPI"></div>
                     <?php if(isset($err['location_name'])) { ?>
                         <span class="err_message">
                             <?php echo $err['location_name'] ?>
@@ -353,6 +352,20 @@
         </form>
     </div>
     <!-- JAVASCRIPT -->
+     
+    <script>
+        function myMap() {
+            var mapProp= {
+                center:new google.maps.LatLng(27.7097141266293, 85.31943695688719),
+                zoom:0,
+            };
+        var map = new google.maps.Map(document.getElementById("gmapAPI"),mapProp);
+    }
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&callback=myMap"></script>
+
+<!--     
     <script type="text/javascript" src="file/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
@@ -374,6 +387,6 @@
                 });
             });                 
         });
-    </script>
+    </script> -->
 </body>
 </html>

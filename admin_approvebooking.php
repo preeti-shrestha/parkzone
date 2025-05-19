@@ -239,8 +239,8 @@
     </div>
     <div class="main">
         <div class="mini-nav">
-            <a href="admin_listbooking.php"><span class="active">Booked Slots</span></a>
-            <a href="admin_approvebooking.php"><span>Approve Booking</span></a>
+            <a href="admin_listbooking.php"><span>Booked Slots</span></a>
+            <a href="admin_approvebooking.php"><span class="active">Approve Booking</span></a>
         </div>
         <div class="slot-list">
             <?php if(isset($_GET['msg']) && $_GET['msg']==3) {?>
@@ -268,9 +268,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if($data['ApprovalStatus']=='pending'){?>
-                        <?php if(count($data)>0){ ?>
-                            <?php foreach($data as $key=>$record){ ?>    
+                    <?php if(count($data)>0){ ?>
+                        <?php foreach($data as $key=>$record){ ?>    
+                            <?php if($record['ApprovalStatus']=='pending'){?>
                                 <tr>
                                     <td><?php echo $key+1 ?></td>
                                     <td><?php echo $record['BookID'] ?></td>
@@ -284,11 +284,11 @@
                                     </td>
                                 </tr>
                             <?php } ?>
-                        <?php } else {?>
-                            <tr>
-                                <td colspan="9">No slots booked</td>
-                            </tr>
                         <?php }?>
+                    <?php } else {?>
+                        <tr>
+                            <td colspan="9">No slots booked</td>
+                        </tr>
                     <?php }?>
                 </tbody>
             </table>

@@ -267,9 +267,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if($data['ApprovalStatus']=='approved' || $data['ApprovalStatus']=='cancelled'){?>
-                        <?php if(count($data)>0){ ?>
-                            <?php foreach($data as $key=>$record){ ?>    
+                    <?php if(count($data)>0){ ?>
+                        <?php foreach($data as $key=>$record){ ?> 
+                            <?php if($data['ApprovalStatus']=='approved' || $data['ApprovalStatus']=='cancelled'){?>
                                 <tr>
                                     <td><?php echo $key+1 ?></td>
                                     <td><?php echo $record['BookID'] ?></td>
@@ -281,11 +281,11 @@
                                     <td><?php echo $record['ApprovalStatus'] ?></td>
                                 </tr>
                             <?php } ?>
-                        <?php } else {?>
-                            <tr>
-                                <td colspan="8">No slots booked</td>
-                            </tr>
                         <?php }?>
+                    <?php } else {?>
+                        <tr>
+                            <td colspan="8">No slots booked</td>
+                        </tr>
                     <?php }?>
                 </tbody>
             </table>
