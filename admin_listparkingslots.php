@@ -62,7 +62,7 @@
         .sidebar{
             position:sticky ;
             width: 250px;
-            height: 88vh;
+            height: 150vh;
             color:#cbeeff;
             overflow:hidden;
             padding-left: 30px;

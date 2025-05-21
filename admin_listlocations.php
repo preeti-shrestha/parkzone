@@ -15,7 +15,7 @@
     $dataadmin=$adminrole->fetch_assoc();
     $roleadmin=$dataadmin['AdminRole'];
     require_once 'connection.php';
-    $sql="SELECT LocationID,LocationName,LocationLat,LocationLong,TwoWheelSlot,FourWheelSlot from parklocation";
+    $sql="SELECT * from parklocation";
     $result =$connection->query($sql);
     
     $data=[];
@@ -277,8 +277,8 @@
                                 <td><?php echo $key+1 ?></td>
                                 <td><?php echo $record['LocationID'] ?></td>
                                 <td><?php echo $record['LocationName'] ?></td>
-                                <td><?php echo $record['LocationLat']." ".N ?></td>
-                                <td><?php echo $record['LocationLong']." ".E ?></td>
+                                <td><?php echo $record['LocationLat']." N" ?></td>
+                                <td><?php echo $record['LocationLong']." E" ?></td>
                                 <td><?php echo $record['TwoWheelSlot'] ?></td>
                                 <td><?php echo $record['FourWheelSlot'] ?></td>
                                 <td class="action">

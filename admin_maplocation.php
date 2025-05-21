@@ -14,18 +14,6 @@
     $dataadmin=[];
     $dataadmin=$adminrole->fetch_assoc();
     $roleadmin=$dataadmin['AdminRole'];
-    /*
-    require_once 'connection.php';
-    $sql="SELECT VoterID,FirstName,MiddleName,LastName,DateOfBirth,Gender,Address,Email from voter where VoterStatus='active'";
-    $result =$connection->query($sql);
-    
-    $data=[];
-    if($result-> num_rows>0){
-        while($row=$result->fetch_assoc()){
-            array_push($data,$row);
-        }
-    }
-*/
 ?>
 <!DOCTYPE html>
 <html lang="en">

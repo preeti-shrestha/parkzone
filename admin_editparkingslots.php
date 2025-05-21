@@ -24,33 +24,35 @@
     }else{
         $row=[];
     }
+    $twowheels=$row['TwoWheelSlot'];
+    $fourwheels=$row['FourWheelSlot'];
     $location_id=$row['LocationID'];
 
     if(isset($_POST['btnSave'])){
         $err=[];
         if(isset($_POST['twowheelslot']) && !empty($_POST['twowheelslot']) && trim($_POST['twowheelslot']) ){
             $twowheelslot=$_POST['twowheelslot'];
-            if(!preg_match('/^[0-9]+$/',$twowheelslot)){
+            if(!preg_match('/^[0-9]*$/',$twowheelslot)){
                 $err['twowheelslot'] =  'Enter valid number of slots';
-            }else{
-                $err['twowheelslot']='Please enter number of slots';
             }
+        }else{
+            $err['twowheelslot']='Please enter number of slots';
         }
         if(isset($_POST['fourwheelslot']) && !empty($_POST['fourwheelslot']) && trim($_POST['fourwheelslot']) ){
             $fourwheelslot=$_POST['fourwheelslot'];
-            if(!preg_match('/^[0-9]+$/',$fourwheelslot)){
+            if(!preg_match('/^[0-9]*$/',$fourwheelslot)){
                 $err['fourwheelslot'] =  'Enter valid number of slots';
             }
         }else{
             $err['fourwheelslot']='Please enter number of slots';
         }
-        $totaltwowheelslot=$row['TwoWheelSlot']+$twowheelslot;
-        $totalfourwheelslot=$row['FourWheelSlot']+$fourwheelslot;
+        $totaltwowheelslot=(int)$twowheels+(int)$twowheelslot;
+        $totalfourwheelslot=(int)$fourwheels+(int)$fourwheelslot;
         if(count($err)==0){
             require_once 'connection.php';
-            $sqlupdate="UPDATE parklocation SET TwoWheelSlot='$totaltwowheelslot', FourWheelSlot='$totalfourwheelslot' where AdminID='$admin_id' ";
+            $sqlupdate="UPDATE parklocation SET TwoWheelSlot=$totaltwowheelslot, FourWheelSlot=$totalfourwheelslot where AdminID='$admin_id' ";
             $connection->query($sqlupdate);
-            if($connection->affected_rows==1 && $connection->insert_id>0){
+            if($connection->affected_rows==1){
                 $success='Slots added successfully';
             }else{
                 $error='Slot addition failed';
@@ -319,8 +321,8 @@
             <a href="admin_editparkingslots.php"><span class="active">Update Slots</span></a>
         </div>
         <div style="padding:auto; margin:20px auto;">
-            <h4>Current No. of Two Wheeler Slots : <?php echo isset($row['TwoWheelSlot']) ?></h4>
-            <h4>Current No. of Four Wheeler Slots : <?php echo isset($row['FourWheelSlot']) ?></h4>
+            <h4>Current No. of Two Wheeler Slots : <?php echo $twowheels ?></h4>
+            <h4>Current No. of Four Wheeler Slots : <?php echo $fourwheels ?></h4>
         </div>
         <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
             <fieldset>
@@ -333,7 +335,7 @@
                 <?php }?>
                 <div class="label-input">
                     <label for="twowheelslot">Add new Two Wheel Slots</label>
-                    <input type="text" name="twowheelslot" id="twowheelslot" value="<?php echo isset($twowheelslot)?$twowheelslot:'' ?>">
+                    <input type="text" name="twowheelslot" id="twowheelslot" >
                     <span id="check_twowheelslot"></span>
                     <?php if(isset($err['twowheelslot'])) { ?>
                         <span class="err_message">
@@ -343,7 +345,7 @@
                 </div>
                 <div class="label-input">
                     <label for="fourwheelslot">Add new Four Wheel Slots</label>
-                    <input type="text" name="fourwheelslot" id="fourwheelslot" value="<?php echo isset($fourwheelslot)?$fourwheelslot:'' ?>">
+                    <input type="text" name="fourwheelslot" id="fourwheelslot">
                     <?php if(isset($err['fourwheelslot'])) { ?>
                         <span class="err_message">
                             <?php echo $err['fourwheelslot'] ?>

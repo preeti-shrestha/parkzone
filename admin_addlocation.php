@@ -363,7 +363,7 @@
     }
     </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&callback=myMap"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCD-HRgN8WfY1lYEsR35pYGXLx0YYRKATs&callback=myMap"></script>
 
 <!--     
     <script type="text/javascript" src="file/jquery.min.js"></script>
