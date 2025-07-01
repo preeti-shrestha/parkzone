@@ -269,7 +269,7 @@
                 <tbody>
                     <?php if(count($data)>0){ ?>
                         <?php foreach($data as $key=>$record){ ?> 
-                            <?php if($data['ApprovalStatus']=='approved' || $data['ApprovalStatus']=='cancelled'){?>
+                            <?php if($record['ApprovalStatus']=='approved' || $record['ApprovalStatus']=='cancelled'){?>
                                 <tr>
                                     <td><?php echo $key+1 ?></td>
                                     <td><?php echo $record['BookID'] ?></td>

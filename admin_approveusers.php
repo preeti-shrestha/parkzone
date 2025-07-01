@@ -15,7 +15,7 @@
     $dataadmin=$adminrole->fetch_assoc();
     $roleadmin=$dataadmin['AdminRole'];
     require_once 'connection.php';
-    $sql="SELECT UserID,Name,Phone,VehicleNo,VehicleType,BookingStatus from user where Status='active'";
+    $sql="SELECT UserID,Name,Phone,Email,VehicleNo,VehicleType,BookingStatus from user where Status='inactive'";
     $result =$connection->query($sql);
     
     $data=[];

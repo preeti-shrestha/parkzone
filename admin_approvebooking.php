@@ -279,6 +279,7 @@
                                     <td><?php echo $record['BookStatus'] ?></td>
                                     <td><?php echo $record['SlotID'] ?></td>
                                     <td><?php echo $record['UserID'] ?></td>
+                                    <td><?php echo $record['ApprovalStatus'] ?></td>
                                     <td class="action">
                                         <a href="admin_changeapprovalstatus.php?id=<?php echo $record['BookID'] ?>" class="edit">Approve</a>
                                     </td>

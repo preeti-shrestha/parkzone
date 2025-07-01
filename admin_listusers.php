@@ -15,7 +15,7 @@
     $roleadmin=$dataadmin['AdminRole'];
     error_reporting(0);
     require_once 'connection.php';
-    $sql="SELECT UserID,Name,Phone,VehicleNo,VehicleType,BookingStatus from user where Status='active'";
+    $sql="SELECT UserID,Name,Phone,Email,VehicleNo,VehicleType,BookingStatus from user where Status='active'";
     $result =$connection->query($sql);
     
     $data=[];

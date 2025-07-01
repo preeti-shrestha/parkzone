@@ -344,12 +344,12 @@
                 var check_username=$(this).val();
                 $.ajax({
                     url:'admin_checkusername.php',
-                    data:{'username':check_username},
+                    data:{'user_name':check_username},
                     dataType:'text',
                     method:'post',
                     success:function(resp){
                         $('#check_username').html(resp);
-                        if(resp=='Location available'){
+                        if(resp=='Username available'){
                             $('#check_username').css({color:'green'})
                         }else{
                             $('#check_username').css({color:'red'})
