@@ -33,7 +33,6 @@ $result = $stmt->get_result();
 if ($result->num_rows === 1) {
     $row = $result->fetch_assoc();
 
-    // Verify password using password_verify
     if (password_verify($password, $row['PassWord'])) {
         if ($row['Status'] == 'inactive') {
             echo json_encode([

@@ -4,11 +4,9 @@ header('Content-Type: application/json');
 $conn = new mysqli('localhost', 'root', '', 'parkzone');
 
 $data = json_decode(file_get_contents("php://input"));
-
 if (isset($data->user_id)) {
     $user_id = $data->user_id;
-
-    $stmt = $conn->prepare("SELECT Name, Email, Phone, VehicleNo, VehicleType, Status FROM user WHERE UserID = ?");
+    $stmt = $conn->prepare("SELECT Name, Email, Phone, VehicleNo, VehicleType, Status,UserName FROM user WHERE UserID = ?");
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -21,6 +19,7 @@ if (isset($data->user_id)) {
             "phone" => $row["Phone"],
             "vehicle_no" => $row["VehicleNo"],
             "vehicle_type" => $row["VehicleType"],
+            "username"=>$row['UserName'],
             "status" => $row["Status"]
         ]);
     } else {

@@ -1,12 +1,10 @@
 <?php
 header('Content-Type: application/json');
-header("Access-Control-Allow-Origin: *"); // if cross-origin needed
-
+header("Access-Control-Allow-Origin: *");
 $host = "localhost";
 $user = "root";
 $password = "";
 $dbname = "parkzone";
-
 $conn = new mysqli($host, $user, $password, $dbname);
 if ($conn->connect_error) {
     echo json_encode([
@@ -15,7 +13,6 @@ if ($conn->connect_error) {
     ]);
     exit;
 }
-
 $fullname = $_POST['fullname'] ?? '';
 $email = $_POST['email'] ?? '';
 $phone = $_POST['phone'] ?? '';
@@ -23,10 +20,7 @@ $vehicleno = $_POST['vehicleno'] ?? '';
 $vehicletype = $_POST['vehicletype'] ?? '';
 $username = $_POST['username'] ?? '';
 $password = $_POST['password'] ?? '';
-
 $errors = [];
-
-// Validate inputs (add more validation as needed)
 if (empty($fullname) || empty($email) || empty($phone) || empty($vehicleno) || empty($vehicletype) || empty($username) || empty($password)) {
     echo json_encode([
         "success" => false,
@@ -34,8 +28,6 @@ if (empty($fullname) || empty($email) || empty($phone) || empty($vehicleno) || e
     ]);
     exit;
 }
-
-// Check for duplicates function
 function existsInDb($conn, $field, $value) {
     $stmt = $conn->prepare("SELECT 1 FROM user WHERE $field = ?");
     $stmt->bind_param("s", $value);
@@ -67,7 +59,6 @@ if (!empty($errors)) {
     exit;
 }
 
-// Securely hash the password
 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
 $stmt = $conn->prepare("INSERT INTO user (Name, Email, Phone, VehicleNo, VehicleType, UserName, PassWord, Status,BookingStatus) VALUES (?, ?, ?, ?, ?, ?, ?, 'inactive','notbooked')");

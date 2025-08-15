@@ -244,7 +244,7 @@
             <a href="#"><span class="active">List</span></a>
             <a href="admin_addparkingadmin.php"><span>Add Admin</span></a>
             <a href="admin_addlocation.php"><span>Add Location</span></a>
-            <a href="admin_maplocation.php"><span>Map</span></a>
+            <!-- <a href="admin_maplocation.php"><span>Map</span></a> -->
         </div>
         <div class="location-list">
             <?php if(isset($_GET['msg']) && $_GET['msg']==3) {?>
@@ -282,11 +282,10 @@
                                 <td><?php echo $record['TwoWheelSlot'] ?></td>
                                 <td><?php echo $record['FourWheelSlot'] ?></td>
                                 <td class="action">
-                                    <a href="admin_maplocation.php?id=<?php echo $record['LocationID'] ?>" class="view">View</a>
-                                    |
                                     <a href="admin_editlocation.php?id=<?php echo $record['LocationID'] ?>" class="edit">Edit</a>
-                                    |
-                                    <a href="admin_deletelocation.php?id=<?php echo $record['LocationID'] ?>" class="delete" onclick="return confirm('Are you sure to delete the location?')">Delete</a>
+                                    <!--|
+                                    <a href="admin_deletelocation.php?id=<?php //echo $record['LocationID'] ?>" class="delete" onclick="return confirm('Are you sure to delete the location?')">Delete</a>
+                                    -->
                                 </td>
                             </tr>
                         <?php } ?>

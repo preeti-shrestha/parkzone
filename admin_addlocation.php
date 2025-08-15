@@ -27,6 +27,13 @@
             array_push($data1,$row1);
         }
     }
+    $sql_existing = "SELECT LocationName, LocationLat, LocationLong FROM parklocation";
+    $result_existing = $connection->query($sql_existing);
+    $existing_locations = [];
+    while ($row_existing = $result_existing->fetch_assoc()) {
+        $existing_locations[] = $row_existing;
+    }
+    $locations_json=json_encode($existing_locations);
     if(isset($_POST['btnSave'])){
         $err=[];
         if(isset($_POST['location_name']) && !empty($_POST['location_name']) && trim($_POST['location_name']) ){
@@ -42,6 +49,21 @@
         }else{
             $err['parking_admin_id']='Please select parking admin';
         }
+        $location_lat = $_POST['location_lat'] ?? '';
+        $location_long = $_POST['location_long'] ?? '';
+
+        if(empty($location_lat) || empty($location_long)){
+            $err['location_coordinates'] = 'Please select location from map.';
+        } else {
+            $sql_check = "SELECT * FROM parklocation WHERE 
+                        ABS(LocationLat - '$location_lat') < 0.0001 
+                        AND ABS(LocationLong - '$location_long') < 0.0001";
+            $result = $connection->query($sql_check);
+            if($result->num_rows > 0){
+                $err['location_coordinates'] = 'Parking location already exists.';
+            }
+        }
+
         if(count($err)==0){
             require_once 'connection.php';
             $sql="insert into parklocation(LocationName,LocationLat,LocationLong,AdminID,TwoWheelSlot,FourWheelSlot)
@@ -64,6 +86,8 @@
     <title>Users</title>
     <?php require_once 'link.php'; ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <style>
         *{
             margin: 0;
@@ -209,6 +233,11 @@
             background-color: #d4e9ff;
             box-shadow: 1px 1px 1px 1px #8a98b3 inset;
         }
+        .error_message_box{
+            color:red;
+            font-size:12px;
+            text-align:right;
+        }
         .btn{
             text-align: center;
             padding: 10px;
@@ -251,7 +280,6 @@
             <img src="images/fulllogo.png" alt="logo" height="75px"></a>
         </div>
     </div>
-    
     <div class="sidebar">
             <div class="menu">
                 <li>
@@ -285,8 +313,8 @@
                             <i class="fa-solid fa-clipboard-check"></i>
                             <span> Booking </span>
                         </a>
-                    </li>     
-                <?php }?>                   
+                    </li>          
+                <?php }?>              
                 <li class="logout">
                     <a href="admin_logout.php">
                         <i class="fa-solid fa-right-from-bracket"></i>
@@ -300,7 +328,7 @@
             <a href="admin_listlocations.php"><span>List</span></a>
             <a href="admin_addparkingadmin.php"><span>Add Admin</span></a>
             <a href="#"><span class="active">Add Location</span></a>
-            <a href="admin_maplocation.php"><span>Map</span></a>
+            <!-- <a href="admin_maplocation.php"><span>Map</span></a> -->
         </div>
         <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
             <fieldset>
@@ -314,35 +342,46 @@
                 <div class="label-input">
                     <label for="location_name">Location Name</label>
                     <input type="text" name="location_name" id="location_name" value="<?php echo isset($location_name)?$location_name:'' ?>">
-                    <span id="check_location"></span>
-                    <?php if(isset($err['location_name'])) { ?>
-                        <span class="err_message">
-                            <?php echo $err['location_name'] ?>
-                        </span>
-                    <?php } ?>
+                    <div class="error_message_box">
+                        <span id="check_location"></span>
+                        <?php if(isset($err['location_name'])) { ?>
+                            <span class="err_message">
+                                <?php echo $err['location_name'] ?>
+                            </span>
+                        <?php } ?>
+                    </div>
                 </div>
                 <div class="label-input">
                     <label for="parking_admin_id">Assign Parking Admin</label>
-                    <select name="parking_admin_id" id="parking_admin_id" value="<?php echo isset($parking_admin_id)?$parking_admin_id:'' ?>">
+                    <select name="parking_admin_id" id="parking_admin_id">
                         <option value="0">Select one</option>
-                        <?php foreach($data1 as $key=>$value){?>
-                            <option value="<?php echo $value['AdminID'] ?>"><?php echo $value['Username'] ?></option>
-                        <?php }?>
+                        <?php foreach($data1 as $key=>$value){ ?>
+                            <option value="<?php echo $value['AdminID']; ?>" 
+                                <?php echo (isset($parking_admin_id) && $parking_admin_id == $value['AdminID']) ? 'selected' : ''; ?>>
+                                <?php echo $value['Username']; ?>
+                            </option>
+                        <?php } ?>
                     </select>   
-                    <?php if(isset($err['parking_admin_id'])) { ?>
-                        <span class="err_message">
-                            <?php echo $err['parking_admin_id'] ?>
-                        </span>
-                    <?php } ?> 
+                    <div class="error_message_box">
+                        <?php if(isset($err['parking_admin_id'])) { ?>
+                            <span class="err_message">
+                                <?php echo $err['parking_admin_id'] ?>
+                            </span>
+                        <?php } ?>
+                    </div> 
                 </div>
                 <div class="label-input label-map">
-                    <label for="location_name">Location in Map</label>
+                    <label for="location_coordinates">Location in Map</label>
                     <div class="gmapAPI" id="gmapAPI"></div>
-                    <?php if(isset($err['location_name'])) { ?>
-                        <span class="err_message">
-                            <?php echo $err['location_name'] ?>
-                        </span>
-                    <?php } ?>
+                    <div class="error_message_box">
+                        <?php if(isset($err['location_coordinates'])) { ?>
+                            <span class="err_message">
+                                <?php echo $err['location_coordinates'] ?>
+                            </span>
+                        <?php } ?>
+                    </div>
+                    <input type="hidden" id="location_lat" name="location_lat" value="<?php echo isset($location_lat) ? $location_lat : ''; ?>">
+                    <input type="hidden" id="location_long" name="location_long" value="<?php echo isset($location_long) ? $location_long : ''; ?>">
                 </div>
                 <div class="btn">
                     <button type="submit" name="btnSave" class="btnSave">Confirm</button>
@@ -352,27 +391,68 @@
         </form>
     </div>
     <!-- JAVASCRIPT -->
-     
-    <script>
-        function myMap() {
-            var mapProp= {
-                center:new google.maps.LatLng(27.7097141266293, 85.31943695688719),
-                zoom:0,
-            };
-        var map = new google.maps.Map(document.getElementById("gmapAPI"),mapProp);
-    }
     </script>
+    <script>
+        var map = L.map('gmapAPI').setView([27.7172, 85.3240], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCD-HRgN8WfY1lYEsR35pYGXLx0YYRKATs&callback=myMap"></script>
+        let marker;
+        let selectedLat = null;
+        let selectedLng = null;
 
-<!--     
+        const existingLocations = <?php echo $locations_json; ?>;
+        const redIcon = L.icon({
+            iconUrl: 'images/red_icon.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        existingLocations.forEach(loc => {
+            L.marker([loc.LocationLat, loc.LocationLong])
+                .addTo(map)
+                .bindPopup(loc.LocationName);
+        });
+        const prevLat = document.getElementById('location_lat').value;
+        const prevLng = document.getElementById('location_long').value;
+
+        if (prevLat && prevLng) {
+            const latLng = L.latLng(parseFloat(prevLat), parseFloat(prevLng));
+            marker = L.marker(latLng,{icon:redIcon}).addTo(map);
+        }
+
+        map.on('click', function (e) {
+        const lat = e.latlng.lat.toFixed(6);
+        const lng = e.latlng.lng.toFixed(6);
+
+        const exists = existingLocations.some(loc => {
+            return (Math.abs(loc.LocationLat - lat) < 0.0001) && (Math.abs(loc.LocationLong - lng) < 0.0001);
+        });
+
+        if (exists) {
+            alert("Location already exists at this position!");
+            return;
+        }
+
+        if (marker) {
+            marker.setLatLng(e.latlng);
+        } else {
+            marker = L.marker(e.latlng,{icon:redIcon}).addTo(map);
+        }
+        document.getElementById('location_lat').value = lat;
+        document.getElementById('location_long').value = lng;
+    });
+    </script>
     <script type="text/javascript" src="file/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             $('#location_name').keyup(function(){
                 var check_location=$(this).val();
                 $.ajax({
-                    url:'election_check.php',
+                    url:'admin_checkparkinglocationname.php',
                     data:{'location_name':check_location},
                     dataType:'text',
                     method:'post',
@@ -387,6 +467,6 @@
                 });
             });                 
         });
-    </script> -->
+    </script>
 </body>
 </html>

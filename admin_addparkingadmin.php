@@ -195,6 +195,11 @@
             background-color: #d4e9ff;
             box-shadow: 1px 1px 1px 1px #8a98b3 inset;
         }
+        .error_message_box{
+            color:red;
+            font-size:12px;
+            text-align:right;
+        }
         .btn{
             text-align: center;
             padding: 10px;
@@ -292,7 +297,7 @@
             <a href="admin_listlocations.php"><span>List</span></a>
             <a href="#"><span class="active">Add Admin</span></a>
             <a href="admin_addlocation.php"><span>Add Location</span></a>
-            <a href="admin_maplocation.php"><span>Map</span></a>
+            <!-- <a href="admin_maplocation.php"><span>Map</span></a> -->
         </div>
         <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
             <fieldset>
@@ -306,21 +311,25 @@
                 <div class="label-input">
                     <label for="username">Username</label>
                     <input type="text" name="username" id="username" value="<?php echo isset($username)?$username:'' ?>">
-                    <span id="check_username"></span>
-                    <?php if(isset($err['username'])) { ?>
-                        <span class="err_message">
-                            <?php echo $err['username'] ?>
-                        </span>
-                    <?php } ?>
+                    <div class="error_message_box">
+                        <span id="check_username"></span>
+                        <?php if(isset($err['username'])) { ?>
+                            <span class="err_message">
+                                <?php echo $err['username'] ?>
+                            </span>
+                        <?php } ?>
+                    </div>
                 </div>
                 <div class="label-input">
                     <label for="password">Password</label>
                     <input type="password" name="password" id="password" value="<?php echo isset($password)?$password:'' ?>">
-                    <?php if(isset($err['password'])) { ?>
-                        <span class="err_message">
-                            <?php echo $err['password'] ?>
-                        </span>
-                    <?php } ?>
+                    <div class="error_message_box">
+                        <?php if(isset($err['password'])) { ?>
+                            <span class="err_message">
+                                <?php echo $err['password'] ?>
+                            </span>
+                        <?php } ?>
+                    </div>
                 </div>
                 <div class="btn">
                     <button type="submit" name="btnSave" class="btnSave">Confirm</button>

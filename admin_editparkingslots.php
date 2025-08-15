@@ -15,7 +15,6 @@
     $dataadmin=$adminrole->fetch_assoc();
     $roleadmin=$dataadmin['AdminRole'];
 
-    /* get slots info */
     $sql="SELECT LocationID,TwoWheelSlot,FourWheelSlot from parklocation where AdminID='$admin_id' ";
     $result =$connection->query($sql);
     $data=[];
@@ -223,6 +222,11 @@
             background-color: #d4e9ff;
             box-shadow: 1px 1px 1px 1px #8a98b3 inset;
         }
+        .error_message_box{
+            color:red;
+            font-size:12px;
+            text-align:right;
+        }
         .btn{
             text-align: center;
             padding: 10px;
@@ -335,22 +339,25 @@
                 <?php }?>
                 <div class="label-input">
                     <label for="twowheelslot">Add new Two Wheel Slots</label>
-                    <input type="text" name="twowheelslot" id="twowheelslot" >
-                    <span id="check_twowheelslot"></span>
-                    <?php if(isset($err['twowheelslot'])) { ?>
-                        <span class="err_message">
-                            <?php echo $err['twowheelslot'] ?>
-                        </span>
-                    <?php } ?>
+                    <input type="text" name="twowheelslot" id="twowheelslot" value="<?php echo isset($twowheelslot)?$twowheelslot:'' ?>">
+                    <div class="error_message_box">
+                        <?php if(isset($err['twowheelslot'])) { ?>
+                            <span class="err_message">
+                                <?php echo $err['twowheelslot'] ?>
+                            </span>
+                        <?php } ?>
+                    </div>
                 </div>
                 <div class="label-input">
                     <label for="fourwheelslot">Add new Four Wheel Slots</label>
-                    <input type="text" name="fourwheelslot" id="fourwheelslot">
-                    <?php if(isset($err['fourwheelslot'])) { ?>
-                        <span class="err_message">
-                            <?php echo $err['fourwheelslot'] ?>
-                        </span>
-                    <?php } ?>
+                    <input type="text" name="fourwheelslot" id="fourwheelslot" value="<?php echo isset($fourwheelslot)?$fourwheelslot:'' ?>">
+                    <div class="error_message_box">
+                        <?php if(isset($err['fourwheelslot'])) { ?>
+                            <span class="err_message">
+                                <?php echo $err['fourwheelslot'] ?>
+                            </span>
+                        <?php } ?>
+                    </div>
                 </div>
                 <div class="btn">
                     <button type="submit" name="btnSave" class="btnSave">Confirm</button>

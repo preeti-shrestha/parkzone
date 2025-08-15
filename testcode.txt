@@ -1,14 +1,3 @@
-//for testing purpose
-CREATE EVENT change_status
-ON SCHEDULE EVERY 1 SECOND
-DO
-  UPDATE datestatuschange
-  SET currentstatus = CASE
-    WHEN begintime > NOW() THEN 'upcoming'
-    WHEN endtime < NOW() THEN 'ended'
-    ELSE 'ongoing'
-  END;
-
 //for BookStatus (upcoming,ongoing,ended) table book
 CREATE EVENT change_bookstatus
 ON SCHEDULE EVERY 1 SECOND
@@ -29,52 +18,6 @@ SET ApprovalStatus='cancelled'
 where BookStatus='ended' AND ApprovalStatus='pending';
 
 //for SlotStatus(empty,occupied) table slot, according to BookStatus of table book
-//my code
-CREATE EVENT change_slotstatus
-ON SCHEDULE EVERY 1 SECOND
-DO
-UPDATE slot
-SET SlotStatus=CASE
-WHEN book.BookStatus=='ongoing' THEN 'occupied'
-ELSE 'empty'
-WHERE slot.SlotID=book.SlotID
-END;
-
-//chatgpt correction
-
-CREATE EVENT change_slotstatus
-ON SCHEDULE EVERY 1 SECOND
-DO
-  UPDATE slot
-  SET SlotStatus = (
-    SELECT 
-      CASE 
-        WHEN b.BookStatus = 'ongoing' THEN 'occupied'
-        ELSE 'empty'
-      END
-    FROM book b
-    WHERE b.SlotID = slot.SlotID
-    LIMIT 1
-  )
-  WHERE slot.SlotID IN (SELECT SlotID FROM book);
-
-//for multiple Slots
-CREATE EVENT change_slotstatus
-ON SCHEDULE EVERY 1 SECOND
-DO
-  UPDATE slot
-  SET SlotStatus = (
-    SELECT 
-      CASE 
-        WHEN COUNT(*) FILTER (WHERE BookStatus = 'ongoing') > 0 THEN 'occupied'
-        ELSE 'empty'
-      END
-    FROM book
-    WHERE book.SlotID = slot.SlotID
-  )
-  WHERE slot.SlotID IN (SELECT DISTINCT SlotID FROM book);
-  
-  //for older version of mysql
 CREATE EVENT change_slotstatus
 ON SCHEDULE EVERY 1 SECOND
 DO
@@ -89,3 +32,11 @@ DO
     WHERE book.SlotID = slot.SlotID
   )
   WHERE slot.SlotID IN (SELECT DISTINCT SlotID FROM book);
+ 
+//for BookStatus(ended,upcoming,ongoing) according to ApprovalStatus(cancelled,approved,pending)
+CREATE EVENT change_bookstatusonapprovalcancel
+ON SCHEDULE EVERY 1 SECOND
+DO
+UPDATE book
+SET BookStatus='ended'
+where ApprovalStatus='cancelled';

@@ -15,7 +15,7 @@ $sql = "SELECT b.BookID, b.BookStatus, b.BookStart, b.BookEnd, b.ApprovalStatus,
         FROM book b
         LEFT JOIN parklocation l ON b.LocationID = l.LocationID
         LEFT JOIN slot s ON b.SlotID = s.SlotID
-        WHERE b.UserID = $user_id AND b.BookStatus IN ('ongoing', 'upcoming')
+        WHERE b.UserID = $user_id AND b.BookStatus IN ('ongoing', 'upcoming') AND b.ApprovalStatus IN ('approved','pending')
         order by BookStatus;
     ";
 

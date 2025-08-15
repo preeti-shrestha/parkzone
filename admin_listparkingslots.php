@@ -257,7 +257,7 @@
                         <th>SlotID</th>
                         <th>Slot Type</th>
                         <th>SlotStatus</th>
-                        <th>Action</th>
+                        <!-- <th>Action</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -268,20 +268,20 @@
                                 <td><?php echo $record['SlotID'] ?></td>
                                 <td><?php echo $record['SlotType'] ?></td>
                                 <td><?php echo $record['SlotStatus'] ?></td>
-                                <?php if($record['SlotStatus']=='empty'){ ?>
+                                <!-- <?php //if($record['SlotStatus']=='empty'){ ?>
                                     <td class="action">
-                                        <a href="admin_changeslottype.php?id=<?php echo $record['SlotID'] ?>?locid=<?php echo $record['LocationID'] ?>" class="edit">Change Slot Type</a>
+                                        <a href="admin_changeslottype.php?id=<?php //echo $record['SlotID'] ?>?locid=<?php //echo $record['LocationID'] ?>" class="edit">Change Slot Type</a>
                                         |
-                                        <a href="admin_deleteslot.php?id=<?php echo $record['SlotID'] ?>?locid=<?php echo $record['LocationID'] ?>" class="delete" onclick="return confirm('Are you sure to delete the slot?')">Delete</a>
+                                        <a href="admin_deleteslot.php?id=<?php //echo $record['SlotID'] ?>?locid=<?php //echo $record['LocationID'] ?>" class="delete" onclick="return confirm('Are you sure to delete the slot?')">Delete</a>
                                     </td>
-                                <?php }else{?>
+                                <?php //}else{?>
                                     <td>No action while slot is booked</td>
-                                <?php }?>
+                                <?php //}?> -->
                             </tr>
                         <?php } ?>
                     <?php } else {?>
                         <tr>
-                            <td colspan="5">No slots found</td>
+                            <td colspan="4">No slots found</td>
                         </tr>
                     <?php }?>
                 </tbody>
